@@ -1,0 +1,65 @@
+os.unlink(temp_path)
+
+
+
+# Custom Test Section
+
+st.subheader("🧪 Test with Custom Feature Vector (Optional)")
+
+example_vector = np.array([[7.07, -6.51, 7.65, 11.15, -7.65, 12.48,
+
+                            -11.70, 3.42, 1.46, -2.81, 0.86, -5.24]])
+
+default_str = ", ".join(map(str, example_vector[0]))
+
+
+
+custom_input_str = st.text_area("Enter comma-separated feature values (12 values):", value=default_str)
+
+
+
+try:
+
+    custom_features = np.array([float(x.strip()) for x in custom_input_str.split(",")]).reshape(1, -1)
+
+    if custom_features.shape[1] == 12 and st.button("🔍 Predict from Custom Input"):
+
+        pred = model.predict(custom_features)
+
+        proba = model.predict_proba(custom_features)[0] if hasattr(model, 'predict_proba') else None
+
+        predicted_label = label_encoder.inverse_transform(pred)[0]
+
+        
+
+        st.success(f"🗣️ Predicted Accent: **{predicted_label}**")
+
+        
+
+        if proba is not None:
+
+            proba_df = pd.DataFrame({
+
+                "Accent": label_encoder.classes_,
+
+                "Probability (%)": proba * 100
+
+            }).sort_values("Probability (%)", ascending=False)
+
+
+
+            fig, ax = plt.subplots(figsize=(8, 5))
+
+            ax.barh(proba_df["Accent"], proba_df["Probability (%)"], color='lightgreen')
+
+            ax.set_xlabel("Probability (%)")
+
+            ax.set_title("Custom Feature Input: Prediction Confidence")
+
+            ax.invert_yaxis()
+
+            st.pyplot(fig)
+
+except Exception as e:
+
+    st.error(f"Custom input error: {e}")
