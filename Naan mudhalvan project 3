@@ -1,0 +1,36 @@
+selected", width=50, anchor="w")
+file_path_label.grid(row=0, column=0, padx=5, pady=5, sticky="w")
+
+browse_button = tk.Button(frame, text="Browse", command=browse_file)
+browse_button.grid(row=0, column=1, padx=5, pady=5)
+
+transcribe_button = tk.Button(root, text="Transcribe", state="disabled", width=20)
+transcribe_button.pack(pady=10)
+
+status_label = tk.Label(root, text="Ready", fg="black")
+status_label.pack(pady=5)
+
+tk.Label(root, text="Transcription Result:").pack(anchor="w", padx=10)
+
+text_frame = tk.Frame(root)
+text_frame.pack(padx=10, pady=5, fill="both", expand=True)
+
+scrollbar = tk.Scrollbar(text_frame)
+scrollbar.pack(side="right", fill="y")
+
+transcription_text = tk.Text(text_frame, height=10, width=60, yscrollcommand=scrollbar.set)
+transcription_text.pack(side="left", fill="both", expand=True)
+scrollbar.config(command=transcription_text.yview)
+
+metrics_frame = tk.Frame(root)
+metrics_frame.pack(padx=10, pady=10, fill="x")
+
+wer_label = tk.Label(metrics_frame, text="Word Error Rate (WER): -", anchor="w")
+wer_label.pack(fill="x", pady=2)
+
+cer_label = tk.Label(metrics_frame, text="Character Error Rate (CER): -", anchor="w")
+cer_label.pack(fill="x", pady=2)
+
+# New frame for chart
+chart_frame = tk.Frame(root)
+chart_frame.pack(padx=10, pady=10, fill="both", expand=False)
